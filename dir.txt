@@ -1,0 +1,4 @@
+1, Anderson, Norte, 7000
+2, Julio, Sul, 7000
+3, Everton, Oeste, 7900
+4, Flavio, Leste, 7000
