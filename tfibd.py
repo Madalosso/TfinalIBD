@@ -1,13 +1,10 @@
 import sys
 
 keyWords = ["SELECT","FROM","WHERE","UNION"]
-campos=[]
 
-def getResultFromSelect(string,cont):
-	returnSQL = ""
+#remove espacos em branco da query retorna lista de termos
+def getTermos(string):
 	termos = string.split(" ")
-
-	#remove espacos em branco da query
 	n = len(termos)
 	i=0
 	while i<len(termos):
@@ -15,7 +12,13 @@ def getResultFromSelect(string,cont):
 			termos.pop(i)
 			i-=1
 		i+=1
-	print termos
+	return termos
+	
+
+def getResultFromSelect(string,cont):
+	returnSQL = ""
+	
+	termos = getTermos(string)
 	
 #verifica existencia da clausula SELECT
 	if termos[0]=="SELECT":
@@ -43,6 +46,13 @@ def getResultFromSelect(string,cont):
 		print "Erro!\n A query %d nao possui o SELECT da consulta" % cont
 	return returnSQL
 
+def clearDuplicates(s):
+	unicos = list(set(s))
+	unicos.remove("");
+	return unicos
+
+
+
 def main(argv):
 	#CONSULTA COMPOSTA POR : SELECT * FROM * WHERE * UNION
 	sqlReturn = ""
@@ -60,8 +70,12 @@ def main(argv):
 			sqlReturn += getResultFromSelect(q,cont)
 			cont+=1
 
+		# sqlReturn = list(set(sqlReturn))
+		sqlReturn = clearDuplicates(sqlReturn.split('\n'))
+
 		#retorno da consulta
-		print sqlReturn
+		for l in sqlReturn:
+			print l
 
 
 if __name__ == "__main__": main(sys.argv)
