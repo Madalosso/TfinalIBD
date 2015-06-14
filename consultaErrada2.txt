@@ -1,0 +1,5 @@
+SELECT 1,2,3
+FROM funcionario.txt
+UNION
+SELECT 1,2
+FROM dir.txt
