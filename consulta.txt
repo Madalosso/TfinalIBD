@@ -1,3 +1,2 @@
 SELECT 1,2,4
 FROM func.txt
-WHERE 4 > '4000'

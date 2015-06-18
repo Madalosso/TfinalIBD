@@ -1,3 +1,2 @@
 SELECT 1,2,3
 FROM dir.txt
-WHERE 4 < '7500'

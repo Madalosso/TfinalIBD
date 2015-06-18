@@ -1,6 +1,6 @@
 import sys
 
-keyWords = ["SELECT","FROM","WHERE","UNION"]
+nCampos = -1
 
 #remove espacos em branco da query retorna lista de termos
 def getTermos(string):
@@ -17,6 +17,7 @@ def getTermos(string):
 
 def getResultFromSelect(string,cont):
 	returnSQL = ""
+	global nCampos
 	
 	termos = getTermos(string)
 	
@@ -25,36 +26,64 @@ def getResultFromSelect(string,cont):
 
 #lista os indices dos campos a serem recuperados
 		campos = termos[1].split(',')
+		for nCol in campos:
+			t = int(nCol)
+			if t<0:
+				print "Erro\n Indice solicitado incorreto."
+				exit(1)
+		# print nCampos
+		# print campos
+		# print nCampos
+		if(nCampos==-1):
+			nCampos = len(campos)
+		else:
+			if(nCampos!=len(campos)):
+				print "Erro!\n Diferente numeros de argumentos selecionados na consulta.\n"+"A primeira consulta seleciona "+str(nCampos)+" colunas. Na consulta "+str(cont+1)+", sao "+str(len(campos))+" colunas"
+				exit(1)
 
 #verifica a existencia do FROM
 		if termos[2]=="FROM":
 
 #obtem nome do arquivo(tabela)
 			nomeTabela = termos[3]
-			with open(nomeTabela) as tabela1:
-#abre tabela e le arquivo, para cada linha, adiciona o indice desejado na string de retorno
-				dataTable1 = tabela1.readlines()
-				for line in dataTable1:
-					reg = line.split(',')
-					for nArgs in campos:
-						returnSQL+=reg[int(nArgs)-1]
-						returnSQL+=", "
-					returnSQL+="\n"
+			try:
+				with open(nomeTabela) as tabela1:
+	#abre tabela e le arquivo, para cada linha, adiciona o indice desejado na string de retorno
+					dataTable1 = tabela1.readlines()
+					for line in dataTable1:
+						line = line.rstrip()
+						reg = line.split(',')
+
+						# print reg
+						for nArgs in campos:
+							t  = int(nArgs)-1
+							if t > len(reg):
+								print "Erro!\n Indice solicitado incorreto"
+								exit(1)
+							returnSQL+=reg[t]
+							returnSQL+=", "
+						returnSQL+="\n"
+			except:
+				print "Erro!\n Problema na leitura da tabela"
+				exit(1)
 		else:
 			print "Erro!\n A query %d nao possui o FROM da consulta" % cont
+			exit(1)
 	else:
 		print "Erro!\n A query %d nao possui o SELECT da consulta" % cont
+		exit(1)
 	return returnSQL
 
 def clearDuplicates(s):
 	unicos = list(set(s))
-	unicos.remove("");
+	unicos.remove("")
 	return unicos
 
 
 
 def main(argv):
-	#CONSULTA COMPOSTA POR : SELECT * FROM * WHERE * UNION
+	global nCampos;
+	#CONSULTA COMPOSTA POR : SELECT * FROM * UNION
 	sqlReturn = ""
 	queryFileName = argv[1]
 	#abre arquivo com consulta
@@ -66,13 +95,12 @@ def main(argv):
 		#executa cada consulta separadamente e une os resulados
 		cont=0
 		for q in queries:
-			print q
+			# print q
 			sqlReturn += getResultFromSelect(q,cont)
 			cont+=1
 
 		# sqlReturn = list(set(sqlReturn))
 		sqlReturn = clearDuplicates(sqlReturn.split('\n'))
-
 		#retorno da consulta
 		for l in sqlReturn:
 			print l

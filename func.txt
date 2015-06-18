@@ -1,6 +1,6 @@
-1, Atelmo, Norte, 3000, 2
-2, Bernanrdo, Sul, 5000, 6
-3, Cristina, Norte, 1900, 0
-4, Dener, Leste, 3000, 3
-5, Eduardo, Leste, 2000, 0
-6, Josnei, Oeste, 9999, 1
+1, Atelmo, Norte, 3000, 2 
+2, Bernanrdo, Sul, 5000, 6 
+3, Cristina, Norte, 1900, 0 
+4, Dener, Leste, 3000, 3 
+5, Eduardo, Leste, 2000, 0 
+6, Josnei, Oeste, 9999, 1 
