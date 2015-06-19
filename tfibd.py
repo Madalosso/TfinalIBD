@@ -5,13 +5,8 @@ nCampos = -1
 #remove espacos em branco da query retorna lista de termos
 def getTermos(string):
 	termos = string.split(" ")
-	n = len(termos)
-	i=0
-	while i<len(termos):
-		if termos[i]=="":
-			termos.pop(i)
-			i-=1
-		i+=1
+	while "" in termos:
+		termos.remove("")
 	return termos
 	
 
@@ -93,11 +88,8 @@ def main(argv):
 		queries = data.split("UNION")
 
 		#executa cada consulta separadamente e une os resulados
-		cont=0
-		for q in queries:
-			# print q
-			sqlReturn += getResultFromSelect(q,cont)
-			cont+=1
+		for i, q in enumerate(queries):
+			sqlReturn += getResultFromSelect(q,i)
 
 		# sqlReturn = list(set(sqlReturn))
 		sqlReturn = clearDuplicates(sqlReturn.split('\n'))
